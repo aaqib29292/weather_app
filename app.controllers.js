@@ -14,17 +14,13 @@ weatherApp.controller('homeController', ['$scope', '$location', 'cityService', f
 
 }]);
 
-weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', function ($scope, $resource,$routeParams, cityService) {
+weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', 'weatherService', function ($scope, $resource, $routeParams, cityService, weatherService) {
 
   $scope.city = cityService.city;
 
   $scope.days = $routeParams.days || '2';
 
-  var url = "http://api.openweathermap.org/data/2.5/forecast/daily";
-
-  $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast/daily", {callback: "JSON_CALLBACK"}, {get: {method: "JSONP"}});
-
-  $scope.weatherResult = $scope.weatherAPI.get({q: $scope.city, cnt: $scope.days, APPID: "97ed8fa956996cbe65121c37c13f329f"});
+  $scope.weatherResult = weatherService.GetWeather($scope.city, $scope.days)
 
   $scope.convertToDate = function(dt) {
     return new Date(dt * 1000);
